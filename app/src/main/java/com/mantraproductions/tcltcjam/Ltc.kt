@@ -15,12 +15,12 @@ import kotlin.concurrent.thread
  * microphone input or a mixer. [now] gives the generator's time in ms; each frame carries the time it will be heard,
  * the output's latency taken from the track's own timestamps.
  */
-class Ltc(private val now: () -> Long) {
+class Ltc(private val now: () -> Long, amplitude: Float = 0.12f) {
     private val rate = 48000
     private val fps = 25
     private val perBit = rate / (80 * fps)              // 24
     @Volatile private var running = false
-    private var level = 0.6f
+    private var level = amplitude.coerceIn(0.02f, 0.6f)
 
     fun start() {
         if (running) return
