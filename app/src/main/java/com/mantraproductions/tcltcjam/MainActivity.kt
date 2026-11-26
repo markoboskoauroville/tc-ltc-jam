@@ -41,14 +41,29 @@ class MainActivity : Activity() {
             setOnClickListener { toggleLtc() }
         }
 
-        setContentView(LinearLayout(this).apply {
+        val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER
             setBackgroundColor(Color.BLACK)
             setPadding(32, 32, 32, 32)
             addView(clock, LinearLayout.LayoutParams(-1, 0, 1f))
             addView(ltcKey, LinearLayout.LayoutParams(-1, -2))
-        })
+        }
+        root.setOnApplyWindowInsetsListener { view, insets ->
+            val safe = insets.getInsets(
+                android.view.WindowInsets.Type.systemBars() or
+                    android.view.WindowInsets.Type.displayCutout()
+            )
+            val margin = (16 * resources.displayMetrics.density).toInt()
+            view.setPadding(
+                safe.left + margin,
+                safe.top + margin,
+                safe.right + margin,
+                safe.bottom + margin
+            )
+            insets
+        }
+        setContentView(root)
         tick()
         applyIntent(intent)
     }
