@@ -50,6 +50,17 @@ class MainActivity : Activity() {
             addView(ltcKey, LinearLayout.LayoutParams(-1, -2))
         })
         tick()
+        applyIntent(intent)
+    }
+
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        applyIntent(intent)
+    }
+
+    private fun applyIntent(intent: android.content.Intent) {
+        if (intent.getBooleanExtra("ltc", false) && ltc == null) toggleLtc()
     }
 
     private fun toggleLtc() {
